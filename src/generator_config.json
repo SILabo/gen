@@ -1,0 +1,20 @@
+{
+"cpu_affinity" : {
+    "port-thread" : [
+        1,
+        2,
+        3,
+        4
+    ],
+    "pcap-thread" : [
+        5
+    ]
+},
+"db" : {
+    "connection" : "postgres",
+    "host" : "localhost",
+    "user" : "ether",
+    "password" : "extractor",
+    "port" : "9999"
+}
+}
