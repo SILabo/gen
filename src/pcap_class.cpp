@@ -17,10 +17,16 @@ namespace egen
     {
         this->raw = raw;
         this->que = que;
+        this->pcap_cpuid = 0;
     }
 
     PcapClass::~PcapClass()
     {
+    }
+
+    int PcapClass::get_cpuid()
+    {
+        return this->pcap_cpuid;
     }
 
 

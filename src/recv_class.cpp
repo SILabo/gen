@@ -25,13 +25,14 @@ RecvClass::~RecvClass()
 
 void RecvClass::RecvFunc(MsgClass* msg)
 {
-    std::cout << "RecvFunc" << std::endl;
-    std::lock_guard<std::mutex> lock(this->mu);
-    std::cout << "Thread #" << 4 << ": on CPU " << sched_getcpu() << std::endl;
+    //std::cout << "RecvFunc" << std::endl;
+    //std::lock_guard<std::mutex> lock(this->mu);
+    //std::cout << "Thread #" << 4 << ": on CPU " << sched_getcpu() << std::endl;
 
     while (1)
     {
         //zeroMQ send & recv
+        ;
     }
 }
 

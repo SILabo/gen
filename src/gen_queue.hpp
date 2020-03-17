@@ -27,12 +27,12 @@ public:
     GenQueue(int rawnum, int pktnum);
     ~GenQueue();
 
-    void raw_push(RawDataClass* raw,  int idx);
-    void pkt_push(PacketClass* pkt, int idx);
-    void raw_pop(RawDataClass* raw,  int idx);
-    void pkt_pop(PacketClass* pkt, int idx);
-    size_t raw_size(RawDataClass* raw, int idx);
-    size_t pkt_size(PacketClass* pkt, int idx);
+    void push(RawDataClass* raw,  int idx);
+    void push(PacketClass* pkt, int idx);
+    void pop(int flags, int idx);
+    size_t size(int flags, int idx);
+    RawDataClass* raw_front(int idx);
+    PacketClass* pkt_front(int idx);
 
 
 private:

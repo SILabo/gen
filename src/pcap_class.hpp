@@ -21,24 +21,28 @@ public:
 	PcapClass(RawDataClass* raw, GenQueue* que);
 	~PcapClass();
 
-
 	std::function <void(void)> func = [&]()
 	{
-		std::cout << "PcapClass Function" << std::endl;
 		std::lock_guard<std::mutex> lock(this->mu);
-		std::cout << "Thread #" << 2 << ": on CPU " << sched_getcpu() << std::endl;
+		this->pcap_cpuid = sched_getcpu();
+#if 0
+		// for Test
+		std::cout << "PcapClass Function" << std::endl;
+		std::cout << "Thread #" << 1 << ": on CPU " << this->pcap_cpuid << std::endl;
+#endif
 
 		while (1) {
 			;
 		}
 	};
+	int get_cpuid();
 
 private:
 
 	RawDataClass* raw;
 	GenQueue* que;
 	std::mutex mu;
-
+	int pcap_cpuid;
 };
 
 

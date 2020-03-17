@@ -12,7 +12,6 @@
 namespace egen
 {
 
-
 GenQueue::GenQueue(int rawnum, int pktnum)
 {
     if ((rawnum + pktnum ) > QUEUE_MAX)
@@ -37,51 +36,138 @@ GenQueue::~GenQueue()
 {
 }
 
-void GenQueue::raw_push(RawDataClass* raw, int idx)
+void GenQueue::push(RawDataClass* raw, int idx)
 {
-    this->mu.lock();
-    this->qraw[idx]->push(raw);
-    this->mu.unlock();
-}
-void GenQueue::pkt_push(PacketClass* pkt,int idx)
-{
-    this->mu.lock();
-    this->qpkt[idx]->push(pkt);
-    this->mu.unlock();
+    if (idx >= 0 && idx < 5)
+    {
+        this->mu.lock();
+        this->qraw[idx]->push(raw);
+        this->mu.unlock();
+    }
+    else
+    {
+        std::cerr << "out of range rawdata Index num" << std::endl;
+    }
 }
 
-void GenQueue::raw_pop(RawDataClass* raw, int idx)
+void GenQueue::push(PacketClass* pkt,int idx)
 {
-    this->mu.lock();
-    this->qraw[idx]->pop();
-    this->mu.unlock();
+    if (idx >= 0 && idx < 4)
+    {
+        this->mu.lock();
+        this->qpkt[idx]->push(pkt);
+        this->mu.unlock();
+    }
+    else
+    {
+        std::cerr << "out of range packet Index num" << std::endl;
+    }
 }
-void GenQueue::pkt_pop(PacketClass* p, int idx)
+
+void GenQueue::pop(int flags, int idx)
 {
-    this->mu.lock();
-    this->qpkt[idx]->pop();
-    this->mu.unlock();
+    if (flags == 0)
+    {
+        if (idx >= 0 && idx < 5)
+        {
+            this->mu.lock();
+            this->qraw[idx]->pop();
+            this->mu.unlock();
+        }
+        else
+        {
+            std::cerr << "out of range rawdata Index num" << std::endl;
+        }
+    }
+    else
+    {
+        if (idx >= 0 && idx < 5)
+        {
+            this->mu.lock();
+            this->qpkt[idx]->pop();
+            this->mu.unlock();
+        }
+        else
+        {
+            std::cerr << "out of range packet Index num" << std::endl;
+        }
+    }
+
 }
-size_t GenQueue::raw_size(RawDataClass* raw, int idx)
+
+size_t GenQueue::size(int flags, int idx)
 {
     size_t sz;
 
-    this->mu.lock();
-    sz = this->qraw[idx]->size();
-    this->mu.unlock();
+    if (flags == 0)
+    {
+        if (idx >= 0 && idx < 5)
+        {
+            this->mu.lock();
+            sz = this->qraw[idx]->size();
+            this->mu.unlock();
+        }
+        else
+        {
+            std::cerr << "out of rawdata range Index num" << std::endl;
+            return 0;
+        }
+    }
+    else
+    {
+        if (idx >= 0 && idx < 4)
+        {
+            this->mu.lock();
+            sz = this->qpkt[idx]->size();
+            this->mu.unlock();
+        }
+        else
+        {
+            std::cerr << "out of packet range Index num" << std::endl;
+            return 0;
+        }
+    }
 
     return sz;
 }
-size_t GenQueue::pkt_size(PacketClass* p, int idx)
+
+
+RawDataClass* GenQueue::raw_front(int idx)
 {
-    size_t sz;
+    RawDataClass* raw;
 
-    this->mu.lock();
-    sz = this->qpkt[idx]->size();
-    this->mu.unlock();
+    if (idx >= 0 && idx < 5)
+    {
+        this->mu.lock();
+        raw = this->qraw[idx]->front();
+        this->mu.unlock();
+    }
+    else
+    {
+        std::cerr << "out of rawdata range Index num" << std::endl;
+        return 0;
+    }
 
-    return sz;
+    return raw;
 }
 
+PacketClass* GenQueue::pkt_front(int idx)
+{
+    PacketClass* pkt;
+
+    if (idx >= 0 && idx < 4)
+    {
+        this->mu.lock();
+        pkt = this->qpkt[idx]->front();
+        this->mu.unlock();
+    }
+    else
+    {
+        std::cerr << "out of packet range Index num" << std::endl;
+        return 0;
+    }
+
+    return pkt;
+}
 
 }  // namespace egen

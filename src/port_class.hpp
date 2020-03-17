@@ -23,27 +23,37 @@ public:
 	PortClass(RawDataClass* raw, GenQueue* que);
 	~PortClass();
 
-
 	std::function <void(void)> func = [&]()
 	{
-		std::cout << "PortClass Function" << std::endl;
+		//std::cout << "PortClass Function" << std::endl;
+
 		std::lock_guard<std::mutex> lock(this->mu);
-		std::cout << "Thread #" << 1 << ": on CPU " << sched_getcpu() << std::endl;
+		this->port_cpuid = sched_getcpu();
+#if 0
+		// for Test
+		std::cout << "Thread #" << this->port_cnt << ": on CPU " << this->port_cpuid[this->port_cnt] << std::endl;
+#endif
 
 		while (1) {
-			if (this->que->raw_size(this->raw, 0) != 0)
+#if 1
+			if (this->que->size(0, 0) != 0)
 			{
-				this->que->raw_pop(this->raw, 0);
+				this->que->pop(0, 0);
 			}
+#else
+			;
+#endif
 		}
     };
 
+	int get_cpuid();
 
 private:
 
 	RawDataClass* raw;
 	GenQueue* que;
 	std::mutex mu;
+	int port_cpuid;
 };
 
 }  // namespace egen

@@ -15,10 +15,16 @@ MsgClass::MsgClass(RawDataClass* raw, GenQueue* que)
 {
     this->raw = raw;
     this->que = que;
+    this->msg_cpuid = 0;
 }
 
 MsgClass::~MsgClass()
 {
+}
+
+int MsgClass::get_cpuid()
+{
+    return this->msg_cpuid;
 }
 
 

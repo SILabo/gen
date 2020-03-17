@@ -15,12 +15,18 @@ PortClass::PortClass(RawDataClass* raw, GenQueue* que)
 {
     this->raw = raw;
     this->que = que;
+
+    this->port_cpuid = 0;
 }
 
 PortClass::~PortClass()
 {
 }
 
+int PortClass::get_cpuid()
+{
+    return this->port_cpuid;
+}
 
 }  // namespace egen
 

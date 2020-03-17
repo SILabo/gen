@@ -24,20 +24,26 @@ public:
 
 	std::function <void(void)> func = [&]()
 	{
-		std::cout << "MsgClass Function" << std::endl;
 		std::lock_guard<std::mutex> lock(this->mu);
-		std::cout << "Thread #" << 3 << ": on CPU " << sched_getcpu() << std::endl;
+		this->msg_cpuid = sched_getcpu();
+#if 0
+		// for Test
+		std::cout << "Thread #" << 5 << ": on CPU " << this->msg_cpuid << std::endl;
+#endif
 
 		while (1) {
 			;
 		}
 	};
 
+	int get_cpuid();
+
 private:
 
 	RawDataClass* raw;
 	GenQueue* que;
 	std::mutex mu;
+	int msg_cpuid;
 
 };
 
