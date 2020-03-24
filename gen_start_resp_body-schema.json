@@ -1,0 +1,40 @@
+{
+    "$comment": [
+        "Author: Shinji Ikuta",
+        "Date:   Mar 19, 2020",
+        "Copyright © 2020 Artiza Networks Inc. All Rights Reserved"
+    ],
+    "$schema": "http://json-schema.org/draft-06/schema#",
+    "$ref": "#/definitions/GenStartRespBody",
+    "definitions": {
+        "GenStartRespBody": {
+            "type": "object",
+            "additionalProperties": false,
+            "description": "Pcap抽出開始応答メッセージ",
+            "properties": {
+                "code": {
+                    "type": "number",
+                    "description": "応答コード"
+                },
+                "message": {
+                    "type": "string",
+                    "description": "メッセージ"
+                },
+                "user_id": {
+                    "type": "number",
+                    "description": "ユーザID"
+                },
+                "generate_id": {
+                    "type": "number",
+                    "description": "ジェネレートID"
+                }
+            },
+            "required": [
+                "code",
+                "user_id",
+                "generate_id"
+            ],
+            "title": "GenStartRespBody"
+        }
+    }
+}

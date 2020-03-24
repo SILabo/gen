@@ -1,0 +1,294 @@
+{
+    "$comment": [
+        "Author: Shinji Ikuta",
+        "Date:   Mar 19, 2020",
+        "Copyright © 2020 Artiza Networks Inc. All Rights Reserved"
+    ],
+    "$schema": "http://json-schema.org/draft-06/schema#",
+    "$ref": "#/definitions/GenStartReqBody",
+    "definitions": {
+        "GenStartReqBody": {
+            "type": "object",
+            "additionalProperties": false,
+            "description": "Pcap抽出開始要求メッセージ ボディ部",
+            "properties": {
+                "user_id": {
+                    "type": "number"
+                },
+                "capture_ids": {
+                    "type": "array"
+                        "$ref": "#/definitions/GenStartReqCaptureIds"
+                },
+                "output": {
+                     "type": "array"
+                        "$ref": "#/definitions/GenStartReqOutput"
+                },
+                "both_direction": {
+                    "type": "bool"
+                },
+                "filters": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/GenStartReqFilters"
+                    }
+                }
+            },
+            "required": [
+                "capture_ids",
+                "output"
+            ],
+            "title": "GenStartReqBody"
+        },
+        "GenStartReqCaptureIds": {
+            "type": "object",
+            "additionalProperties": false,
+            "description": "ポートIDとキャプチャIDの対",
+            "properties": {
+                "port_id": {
+                    "type": "number"
+                },
+                "capture_id": {
+                    "type": "number"
+                }
+            },
+            "required": [
+                "port_id",
+                "capture_id"
+            ]
+            "title": "GenStartReqCaptureIds"
+        },
+        "GenStartReqOutput": {
+            "type": "object",
+            "additionalProperties": false,
+            "description": "PCAPファイル出力情報",
+            "properties": {
+                "path": {
+                    "type": "string"
+                },
+                "base_filename": {
+                    "type": "string"
+                },
+                "time_range": {
+                    "type": "array"
+                },
+                "limit": {
+                    "type": "string"
+                },
+                "split_options": {
+                    "type": "array"
+                }
+
+            },
+            "required": [
+                "path",
+                "base_filename",
+                "time_range"
+            ],
+            "title": "GenStartReqOutput"
+        },
+        "GenStartReqTimeRange": {
+            "type": "object",
+            "additionalProperties": false,
+            "description": "ポートIDとキャプチャIDの対",
+            "properties": {
+                "start": {
+                    "type": "string"
+                },
+                  "stop": {
+                  "type": "string"
+                }
+            },
+            "required": [
+                "start",
+                "stop"
+            ],
+            "title": "GenStartReqTimeRange"
+        },
+        "GenStartReqSplitOptions": {
+            "type": "object",
+            "additionalProperties": false,
+            "description": "ファイル分割オプション",
+            "properties": {
+                "mode": {
+                    "type": "string"
+                },
+                "filesize": {
+                    "type": "string"
+                },
+                "seconds_per_file": {
+                    "type": "string"
+                },
+                "packets_per_file": {
+                    "type": "string"
+                }
+            },
+            "required": [
+            ],
+            "title": "GenStartReqSplitOptions"
+        },
+        "GenStartReqFilters": {
+            "type": "object",
+            "additionalProperties": false,
+            "description": "フィルター条件(複数)",
+            "properties": {
+                "l2": {
+                    "$ref": "#/definitions/GenStartReqFiltersL2",
+                    "description": "フィルター条件 L2レイヤ"
+                },
+                "l3": {
+                    "$ref": "#/definitions/GenStartReqFiltersL3",
+                    "description": "フィルター条件 L3レイヤ"
+                },
+                "l4": {
+                    "$ref": "#/definitions/GenStartReqFiltersL4",
+                    "description": "フィルター条件 L4レイヤ"
+                }
+            },
+            "title": "GenStartReqFilters"
+        },
+        "GenStartReqFiltersL2": {
+            "type": "object",
+            "additionalProperties": false,
+            "description": "フィルター条件 L2レイヤ",
+            "properties": {
+                "tag": {
+                    "type": "string",
+                    "description": "L2ヘッダタイプ"
+                },
+                "vlan_tags": {
+                    "type": "array",
+                    "description": "VLAN(複数)",
+                    "items": {
+                        "$ref": "#/definitions/GenStartReqFiltersVlanTags"
+                    }
+                }
+            },
+            "required": [
+                "tag"
+            ],
+            "title": "GenStartReqFiltersL2"
+        },
+        "GenStartReqFiltersVlanTags": {
+            "type": "object",
+            "additionalProperties": false,
+            "description": "VLAN",
+            "properties": {
+                "tpid": {
+                    "type": "integer",
+                    "description": "TPID"
+                },
+                "vid": {
+                    "$ref":"#/definitions/GenStartReqFiltersVlanTagsVid",
+                    "description": "VID"
+                }
+            },
+            "title": "GenStartReqFiltersVlanTags"
+        },
+        "GenStartReqFiltersVlanTagsVid": {
+            "type": "object",
+            "additionalProperties": false,
+            "description": "フィルタ値とビットマスク",
+            "properties": {
+                "begin": {
+                    "type": "integer",
+                    "description": "開始"
+                },
+                "end": {
+                    "type": "integer",
+                    "description": "終了"
+                }
+            },
+            "title": "GenStartReqFiltersVlanTagsVid"
+        }
+        "GenStartReqFiltersL3": {
+            "type": "object",
+            "additionalProperties": false,
+            "description": "フィルター条件 L3レイヤ",
+            "properties": {
+                "tag": {
+                    "type": "string",
+                    "description": "L3ヘッダタイプ"
+                },
+                "ipv4_src_addr": {
+                    "$ref": "#/definitions/ValueString",
+                    "description": "送信元IPv4アドレス"
+                },
+                "ipv4_dst_addr": {
+                    "$ref": "#/definitions/ValueString",
+                    "description": "宛先IPv4アドレス"
+                },
+                "ipv6_src_addr": {
+                    "$ref": "#/definitions/ValueString",
+                    "description": "送信元IPv6アドレス"
+                },
+                "ipv6_dst_addr": {
+                    "$ref": "#/definitions/ValueString",
+                    "description": "宛先IPv6アドレス"
+                }
+            },
+            "required": [
+                "tag"
+            ],
+            "title": "GenStartReqFiltersL3"
+        },
+        "GenStartReqFiltersL4": {
+            "type": "object",
+            "additionalProperties": false,
+            "description": "フィルター条件 L4レイヤ",
+            "properties": {
+                "tag": {
+                    "type":"string",
+                    "description": "L4プロトコルタイプ"
+                },
+                "udp_src_port":
+                {
+                    "$ref":"#/definitions/ValueString",
+                    "description": "送信元ポート番号"
+                },
+                "udp_dst_port":
+                {
+                    "$ref":"#/definitions/ValueString",
+                    "description": "宛先ポート番号"
+                },
+                "sctp_src_port":
+                {
+                    "$ref":"#/definitions/ValueString",
+                    "description": "送信元ポート番号"
+                },
+                "sctp_dst_port":
+                {
+                    "$ref":"#/definitions/ValueString",
+                    "description": "宛先ポート番号"
+                },
+                "tcp_src_port":{
+                    "$ref":"#/definitions/ValueString",
+                    "description": "送信元ポート番号"
+                },
+                "tcp_dst_port":{
+                    "$ref":"#/definitions/ValueString",
+                    "description": "宛先ポート番号"
+                }
+            },
+            "required": [
+                "tag"
+            ],
+            "title": "GenStartReqFiltersL4"
+        },
+        "ValueString": {
+            "type": "object",
+            "additionalProperties": false,
+            "description": "値文字列",
+            "properties": {
+                "begin": {
+                    "type": "string",
+                    "description": "開始"
+                },
+                "end": {
+                    "type": "string",
+                    "description": "終了"
+                }
+            }
+            "title": "ValueString"
+        }
+    }
+}
