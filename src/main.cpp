@@ -13,6 +13,8 @@
 
 using namespace egen;
 
+//merge
+
 int main()
 {
 	RawDataClass* raw;
