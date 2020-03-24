@@ -13,7 +13,6 @@
 
 using namespace egen;
 
-
 int main()
 {
 	RawDataClass* raw;
